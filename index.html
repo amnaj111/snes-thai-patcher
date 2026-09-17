@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="th" translate="no">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="description" content="AMNAJ Thai ROM Patcher">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="0">
+
+	<title>AMNAJ Thai ROM Patcher</title>
+
+	<link rel="manifest" href="./manifest.json">
+	<link rel="shortcut icon" href="./webapp/app_icon_16.png" type="image/png" sizes="16x16">
+	<link rel="shortcut icon" href="./webapp/app_icon_192.png" type="image/png" sizes="192x192">
+	<link rel="stylesheet" href="./webapp/style.css">
+
+	<script src="./rom-patcher-js/RomPatcher.webapp.js"></script>
+
+	<style>
+		#game-selector-container {
+			max-width: 620px;
+			margin: 0 auto 16px;
+			padding: 16px;
+			box-sizing: border-box;
+			background: #f6f6f6;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			font-family: Arial, sans-serif;
+		}
+
+		#game-selector-container label {
+			display: block;
+			margin-bottom: 8px;
+			font-weight: bold;
+		}
+
+		#game-selector {
+			width: 100%;
+			padding: 10px;
+			font-size: 16px;
+			border: 1px solid #bbb;
+			border-radius: 5px;
+			background: #fff;
+		}
+
+		.notice {
+			max-width: 620px;
+			margin: 0 auto 16px;
+			padding: 12px 14px;
+			box-sizing: border-box;
+			color: #754400;
+			background: #fff4dc;
+			border: 1px solid #f0c36d;
+			border-radius: 8px;
+			font-family: Arial, sans-serif;
+			font-size: 14px;
+			line-height: 1.5;
+		}
+
+		.notice strong {
+			color: #5d3300;
+		}
+
+		/* ซ่อนเมนูเลือกแพตช์ของระบบเดิม */
+		#rom-patcher-row-file-patch,
+		#rom-patcher-row-patch-description,
+		#switch-container,
+		#patch-builder-container,
+		#donation-info,
+		#button-settings {
+			display: none !important;
+		}
+
+		/* Header Banner (แบบที่ 3 - Full Showcase with Ambient Backdrop) */
+		#game-banner-container {
+			max-width: 620px;
+			margin: 0 auto 16px;
+			box-sizing: border-box;
+		}
+		.banner-wrapper {
+			position: relative;
+			width: 100%;
+			height: 250px;
+			border-radius: 12px;
+			overflow: hidden;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+			border: 1px solid rgba(255, 255, 255, 0.15);
+			background: #111418;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.banner-bg {
+			position: absolute;
+			top: 0; left: 0; right: 0; bottom: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: center;
+			filter: blur(20px) brightness(0.45);
+			transform: scale(1.15);
+			pointer-events: none;
+		}
+		#game-banner-img {
+			position: relative;
+			z-index: 1;
+			max-width: 100%;
+			height: 100%;
+			object-fit: contain;
+			object-position: center;
+			display: block;
+			margin: 0 auto;
+			filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.6));
+			transition: transform 0.3s ease;
+		}
+		.banner-wrapper:hover #game-banner-img {
+			transform: scale(1.02);
+		}
+		.banner-gradient {
+			position: absolute;
+			top: 0; left: 0; right: 0; bottom: 0;
+			background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.2) 35%, transparent 100%);
+			pointer-events: none;
+			z-index: 2;
+		}
+		.banner-content {
+			position: absolute;
+			bottom: 0; left: 0; right: 0;
+			padding: 8px 14px;
+			text-align: left;
+			z-index: 3;
+			box-sizing: border-box;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: baseline;
+			gap: 6px;
+			background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.3) 70%, transparent 100%);
+		}
+		.banner-badge {
+			display: inline-block;
+			background: rgba(14, 165, 233, 0.35);
+			color: #38bdf8;
+			border: 1px solid rgba(56, 189, 248, 0.5);
+			font-size: 10px;
+			font-weight: bold;
+			padding: 2px 7px;
+			border-radius: 10px;
+			letter-spacing: 0.5px;
+		}
+		.banner-title {
+			display: inline-block !important;
+			font-size: 15px !important;
+			font-weight: bold;
+			color: #ffffff;
+			margin: 0;
+			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+			line-height: 1.2;
+			font-family: inherit;
+		}
+		.banner-credit {
+			display: inline-block;
+			margin: 0;
+			font-size: 12px;
+			color: #94a3b8;
+			text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+		}
+		@media (max-width: 600px) {
+			.banner-wrapper {
+				height: 180px;
+				border-radius: 8px;
+			}
+			.banner-title {
+				font-size: 13px !important;
+			}
+			.banner-content {
+				padding: 6px 10px;
+			}
+		}
+	</style>
+
+	<script>
+		/* ข้อมูลเกมและแพตช์ทั้งหมด */
+																																														const games = {
+			clocktowerthai: {
+				title: 'Clock Tower (Thai) (ภาษาไทย)',
+				image: './covers/Clock Tower .jpg',
+				patchFile: './Clock Tower (Thai).ips',
+				patchName: 'Clock Tower (Thai)',
+				description: 'ม็อดแปลภาษาไทยสำหรับ Clock Tower (Thai)',
+				outputName: 'Clock Tower (Thai) AMNAJ',
+				inputCrc32: '39dc613b',
+				enabled: true
+			}
+		};
+
+		let originalRomBaseName = '';
+
+		function getSelectedGameId() {
+			const params = new URLSearchParams(window.location.search);
+			let gameId = params.get('game');
+
+			if (!gameId && window.location.hash) {
+				const hash = window.location.hash.replace(/^#/, '');
+				if (hash.startsWith('game=')) {
+					gameId = hash.replace('game=', '');
+				} else if (games[hash]) {
+					gameId = hash;
+				}
+			}
+
+			// If specific game is requested via URL and exists in games list, allow it (for preview)
+			if (gameId && games[gameId]) {
+				return gameId;
+			}
+
+			// Otherwise, pick the first game that is enabled (not hidden)
+			for (const id in games) {
+				if (games[id].enabled !== false) {
+					return id;
+				}
+			}
+
+			const defaultGameId = Object.keys(games)[0] || 'wario';
+			return games[gameId] ? gameId : defaultGameId;
+		}
+
+		window.addEventListener('load', function () {
+			const selectedGameId = getSelectedGameId();
+			const game = games[selectedGameId];
+			const gameSelector = document.getElementById('game-selector');
+
+			if (gameSelector.querySelector('option[value="' + selectedGameId + '"]')) {
+				gameSelector.value = selectedGameId;
+			} else if (game) {
+				// Hidden game being previewed directly via URL
+				const opt = document.createElement('option');
+				opt.value = selectedGameId;
+				opt.textContent = game.title + ' (🔒 ซ่อนอยู่ - โหมดทดสอบ)';
+				gameSelector.appendChild(opt);
+				gameSelector.value = selectedGameId;
+			}
+
+			gameSelector.addEventListener('change', function () {
+				window.location.href = './index.html?game=' + encodeURIComponent(this.value);
+			});
+
+			document.title = game.title + ' - AMNAJ Thai ROM Patcher';
+			const defaultPageTitle = document.getElementById('page-title');
+			if (defaultPageTitle) defaultPageTitle.textContent = game.title;
+			document.getElementById('game-description').textContent = game.description;
+
+			// Header Banner (แบบที่ 3)
+			const bannerContainer = document.getElementById('game-banner-container');
+			const defaultLogo = document.getElementById('default-logo-container');
+			const bannerImg = document.getElementById('game-banner-img');
+			const bannerBg = document.getElementById('game-banner-bg');
+			const bannerTitle = document.getElementById('banner-title');
+			const bannerCredit = document.getElementById('banner-credit');
+
+			if (game && game.image) {
+				if (bannerImg) bannerImg.src = game.image;
+				if (bannerBg) bannerBg.src = game.image;
+				if (bannerTitle) bannerTitle.textContent = game.title || '';
+				if (bannerCredit) bannerCredit.textContent = 'ม็อดภาษาไทยโดย ' + (game.credit || 'AMNAJ');
+				if (bannerContainer) bannerContainer.style.display = 'block';
+				if (defaultLogo) defaultLogo.style.display = 'none';
+			} else {
+				if (bannerContainer) bannerContainer.style.display = 'none';
+				if (defaultLogo) defaultLogo.style.display = 'block';
+			}
+
+			if (game && game.enabled === false) {
+				const noticeElem = document.querySelector('.notice');
+				if (noticeElem) {
+					const hiddenBanner = document.createElement('div');
+					hiddenBanner.style.background = '#fee2e2';
+					hiddenBanner.style.color = '#991b1b';
+					hiddenBanner.style.padding = '8px 12px';
+					hiddenBanner.style.borderRadius = '6px';
+					hiddenBanner.style.marginBottom = '10px';
+					hiddenBanner.style.fontWeight = 'bold';
+					hiddenBanner.textContent = '⚠️ เกมนี้อยู่ในสถานะ "ปิดไว้ก่อน" (ผู้เล่นทั่วไปจะไม่เห็นในเมนูหลัก)';
+					noticeElem.parentNode.insertBefore(hiddenBanner, noticeElem);
+				}
+			}
+
+			try {
+				RomPatcherWeb.initialize({
+					language: 'en',
+					requireValidation: Boolean(game && (game.inputCrc32 || game.inputMd5)),
+					outputSuffix: true,
+					fixChecksum: false,
+					allowDropFiles: true,
+
+					onloadrom: function (rom) {
+						if (rom && rom.fileName) {
+							originalRomBaseName = rom.fileName.replace(/\.[^/.]+$/, '');
+						}
+					},
+
+					onpatch: function (patchedRom) {
+						const credit = 'AMNAJ';
+
+						if (patchedRom && typeof patchedRom.setName === 'function') {
+							if (originalRomBaseName) {
+								patchedRom.setName(
+									originalRomBaseName + (credit ? ' ' + credit : '')
+								);
+							} else {
+								patchedRom.setName(game.outputName);
+							}
+						}
+					}
+				}, {
+					file: game.patchFile,
+					name: game.patchName,
+					description: game.description,
+					outputName: game.outputName,
+					inputCrc32: game.inputCrc32,
+					inputMd5: game.inputMd5
+				});
+			} catch (error) {
+				const container = document.getElementById('rom-patcher-container');
+
+				if (container) {
+					container.innerHTML =
+						'<div style="color:red; padding:15px;">' +
+						'เกิดข้อผิดพลาดในการเปิด Rom Patcher กรุณาใช้ Google Chrome, Microsoft Edge หรือ Firefox เวอร์ชันใหม่' +
+						'</div>';
+				}
+			}
+		});
+	</script>
+</head>
+
+<body>
+	<div id="column">
+		<header id="main-header">
+			<div id="default-logo-container">
+				<img src="./webapp/logo.png" loading="lazy" alt="AMNAJ Logo">
+				<h1 id="page-title">AMNAJ Thai ROM Patcher</h1>
+			</div>
+
+			<div id="game-banner-container" style="display:none;">
+				<div class="banner-wrapper">
+					<img id="game-banner-bg" src="" alt="Backdrop" class="banner-bg">
+					<img id="game-banner-img" src="" alt="Game Banner">
+					<div class="banner-gradient"></div>
+					<div class="banner-content">
+						<span id="banner-badge" class="banner-badge">THAI TRANSLATION</span>
+						<h1 id="banner-title" class="banner-title">AMNAJ Thai ROM Patcher</h1>
+						<p id="banner-credit" class="banner-credit">ม็อดภาษาไทยโดย AMNAJ</p>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<div id="game-selector-container" style="display:none;">
+			<label for="game-selector">เลือกเกมที่ต้องการแพตช์</label>
+
+			<select id="game-selector">
+				<option value="clocktowerthai">Clock Tower (Thai) (ภาษาไทย)</option>
+			</select>
+		</div>
+
+		<div class="notice">
+			<strong id="game-description">เลือกเกม แล้วอัปโหลดไฟล์ ROM ต้นฉบับ</strong><br>
+			สำหรับมือถือ แนะนำให้เปิดผ่าน <strong>Google Chrome</strong>
+			และหลีกเลี่ยงการเปิดจากเบราว์เซอร์ภายใน LINE, Facebook หรือ Messenger
+		</div>
+
+		<div id="wrapper">
+			<div class="tab">
+				<div id="rom-patcher-container">
+
+					<div class="row m-b" id="rom-patcher-row-file-rom">
+						<div class="text-right">
+							<label for="rom-patcher-input-file-rom">ROM file:</label>
+						</div>
+
+						<div class="rom-patcher-container-input">
+							<input
+								type="file"
+								id="rom-patcher-input-file-rom"
+								class="empty"
+								disabled
+							>
+						</div>
+					</div>
+
+					<div class="row m-b" id="rom-patcher-row-alter-header">
+						<div></div>
+
+						<div>
+							<label>
+								<input
+									type="checkbox"
+									id="rom-patcher-checkbox-alter-header"
+									class="styled"
+								>
+								<span id="rom-patcher-span-alter-header"></span>
+							</label>
+						</div>
+					</div>
+
+					<div class="m-b text-selectable text-mono" id="rom-patcher-rom-info">
+						<div class="row">
+							<div class="text-right">CRC32:</div>
+							<div class="text-truncate">
+								<span id="rom-patcher-span-crc32"></span>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="text-right">MD5:</div>
+							<div class="text-truncate">
+								<span id="rom-patcher-span-md5"></span>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="text-right">SHA-1:</div>
+							<div class="text-truncate">
+								<span id="rom-patcher-span-sha1"></span>
+							</div>
+						</div>
+
+						<div class="row" id="rom-patcher-row-info-rom">
+							<div class="text-right">ROM:</div>
+							<div class="text-truncate">
+								<span id="rom-patcher-span-rom-info"></span>
+							</div>
+						</div>
+					</div>
+
+					<div class="row m-b" id="rom-patcher-row-file-patch">
+						<div class="text-right">
+							<label for="rom-patcher-select-patch">Patch file:</label>
+						</div>
+
+						<div class="rom-patcher-container-input">
+							<select id="rom-patcher-select-patch"></select>
+						</div>
+					</div>
+
+					<div class="row m-b" id="rom-patcher-row-patch-description">
+						<div class="text-right text-mono">Description:</div>
+						<div class="text-truncate" id="rom-patcher-patch-description"></div>
+					</div>
+
+					<div class="row m-b text-selectable text-mono" id="rom-patcher-row-patch-requirements">
+						<div class="text-right text-mono" id="rom-patcher-patch-requirements-type">
+							ROM requirements:
+						</div>
+
+						<div class="text-truncate" id="rom-patcher-patch-requirements-value"></div>
+					</div>
+
+					<div class="buttons text-center">
+						<div id="rom-patcher-row-error-message" class="m-b">
+							<span id="rom-patcher-error-message"></span>
+						</div>
+
+						<button id="rom-patcher-button-apply" disabled>
+							Apply patch
+						</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<footer>
+			<strong>AMNAJ Thai ROM Patcher</strong><br>
+			Powered by Rom Patcher JS
+		</footer>
+	</div>
+</body>
+</html>
