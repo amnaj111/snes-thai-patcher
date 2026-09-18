@@ -181,7 +181,7 @@
 
 	<script>
 		/* ข้อมูลเกมและแพตช์ทั้งหมด */
-																																														const games = {
+																																																const games = {
 			clocktowerthai: {
 				title: 'Clock Tower (Thai) (ภาษาไทย)',
 				image: './covers/Clock Tower .jpg',
@@ -190,6 +190,17 @@
 				description: 'ม็อดแปลภาษาไทยสำหรับ Clock Tower (Thai)',
 				outputName: 'Clock Tower (Thai) AMNAJ',
 				inputCrc32: '39dc613b',
+				enabled: true
+			},
+
+			megamanxthai: {
+				title: 'Mega Man X (Thai) (ภาษาไทย)',
+				image: './covers/Mega-Man-X.jpg',
+				patchFile: './Mega Man X (Thai).ips',
+				patchName: 'Mega Man X (Thai)',
+				description: 'ม็อดแปลภาษาไทยสำหรับ Mega Man X (Thai)',
+				outputName: 'Mega Man X (USA) AMNAJ',
+				inputCrc32: '1033eba4',
 				enabled: true
 			}
 		};
@@ -361,6 +372,7 @@
 
 			<select id="game-selector">
 				<option value="clocktowerthai">Clock Tower (Thai) (ภาษาไทย)</option>
+				<option value="megamanxthai">Mega Man X (Thai) (ภาษาไทย)</option>
 			</select>
 		</div>
 
